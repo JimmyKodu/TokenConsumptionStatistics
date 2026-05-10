@@ -15,5 +15,4 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run compile
-      - run: npm test
-
+      - run: xvfb-run -a --server-args="-screen 0 1920x1080x24" npm test
