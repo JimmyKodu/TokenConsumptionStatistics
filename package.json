@@ -59,6 +59,11 @@
           "default": [],
           "description": "Absolute file paths to GitHub Copilot Chat exported log JSON files."
         },
+        "tokenConsumptionStatistics.copilot.enableHeuristicScan": {
+          "type": "boolean",
+          "default": true,
+          "description": "When no Copilot export paths are provided, best-effort scan Copilot's VS Code globalStorage for usage logs (may be incomplete)."
+        },
         "tokenConsumptionStatistics.custom.exportJsonPaths": {
           "type": "array",
           "items": { "type": "string" },

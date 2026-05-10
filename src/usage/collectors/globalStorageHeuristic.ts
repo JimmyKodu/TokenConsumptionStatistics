@@ -10,6 +10,15 @@ export interface HeuristicScanOptions {
 	maxDepth: number;
 }
 
+export async function listGlobalStorageDirNames(globalStorageRoot: string): Promise<string[]> {
+	try {
+		const entries = await fs.readdir(globalStorageRoot, { withFileTypes: true });
+		return entries.filter((e) => e.isDirectory()).map((e) => e.name);
+	} catch {
+		return [];
+	}
+}
+
 function parseJsonOrJsonl(content: string): unknown {
 	const trimmed = content.trim();
 	if (trimmed.length === 0) {
@@ -23,6 +32,28 @@ function parseJsonOrJsonl(content: string): unknown {
 		.map((line) => line.trim())
 		.filter((line) => line.length > 0)
 		.map((line) => JSON.parse(line) as unknown);
+}
+
+export async function collectFromGlobalStorageDirs(
+	provider: UsageProviderId,
+	globalStorageRoot: string,
+	dirNames: string[],
+	options: HeuristicScanOptions,
+): Promise<ProviderScanResult> {
+	const unique = Array.from(new Set(dirNames.filter((d) => d && d.trim().length > 0)));
+	const merged: ProviderScanResult = { provider, records: [], errors: [] };
+
+	for (const dirName of unique) {
+		const res = await collectFromGlobalStorageDir(provider, path.join(globalStorageRoot, dirName), options);
+		if (res.records.length > 0) {
+			merged.records.push(...res.records);
+		}
+		if (res.errors.length > 0) {
+			merged.errors.push(...res.errors.map((e) => `${dirName}/${e}`));
+		}
+	}
+
+	return merged;
 }
 
 export async function collectFromGlobalStorageDir(
@@ -68,4 +99,3 @@ export async function collectFromGlobalStorageDir(
 
 	return { provider, records, errors };
 }
-
