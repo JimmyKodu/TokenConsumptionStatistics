@@ -6,4 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-- Initial release
+- TBD
+
+## [0.0.1] - 2026-05-10
+
+- Status bar total token/call summary
+- Dashboard (webview) with per-provider breakdown
+- Initial collectors for Copilot (export JSON), Cline and Kilo Code (globalStorage heuristic), and Custom imports
+- GitHub Actions: CI + tag-based VSIX release
