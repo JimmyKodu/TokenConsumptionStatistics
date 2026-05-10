@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  vsix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run package
+      - run: npx --yes @vscode/vsce package -o "token-consumption-statistics-${{ github.ref_name }}.vsix"
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: token-consumption-statistics-${{ github.ref_name }}.vsix
+

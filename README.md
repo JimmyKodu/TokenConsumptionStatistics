@@ -1,71 +1,34 @@
-# token-consumption-statistics README
+# Token Consumption Statistics
 
-This is the README for your extension "token-consumption-statistics". After writing up a brief description, we recommend including the following sections.
+VS Code 扩展：统计 AI API 调用条数与 Token 消耗（初版：Copilot / Cline / Kilo Code，Codebuddy 以“自定义导入”方式尽量支持）。
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- 状态栏展示总 Token / 调用条数
+- Dashboard（Webview）展示分来源汇总（Copilot / Cline / Kilo / Custom）
+- 自动刷新（可关闭）
 
-For example if there is an image subfolder under your extension project workspace:
+## Supported providers (v0)
 
-\!\[feature X\]\(images/feature-x.png\)
+- GitHub Copilot Chat：通过 Copilot 的“导出聊天日志”JSON 文件统计（需在设置里填写导出文件路径）
+- Cline（`saoudrizwan.claude-dev`）：扫描其 `globalStorage` 下的 JSON/JSONL 日志并提取 usage（best-effort）
+- Kilo Code（`kilocode.kilo-code`）：扫描其 `globalStorage` 下的 JSON/JSONL 日志并提取 usage（best-effort）
+- Codebuddy：不开源，使用 `Custom` 导入 JSON/JSONL usage 日志（best-effort）
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Commands
 
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- `Token Consumption: Open Dashboard`
+- `Token Consumption: Refresh`
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+- `tokenConsumptionStatistics.refreshIntervalMinutes`: 自动刷新间隔（分钟，0=关闭）
+- `tokenConsumptionStatistics.scan.maxFiles`: 每个 provider 扫描文件上限
+- `tokenConsumptionStatistics.scan.maxFileSizeKb`: 跳过超过该大小的文件
+- `tokenConsumptionStatistics.copilot.exportJsonPaths`: Copilot Chat 导出日志 JSON 的绝对路径数组
+- `tokenConsumptionStatistics.custom.exportJsonPaths`: 额外导入的 JSON/JSONL usage 日志（例如 Codebuddy）
 
-For example:
+## Notes / Limitations
 
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- 目前对 Cline / Kilo Code 是“启发式扫描”，不同版本或存储结构变化可能导致统计不完整或重复。
+- Copilot 目前依赖导出 JSON（扩展无法稳定读取其内部内存日志/请求日志）。
