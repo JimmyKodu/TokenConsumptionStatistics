@@ -32,3 +32,7 @@ VS Code 扩展：统计 AI API 调用条数与 Token 消耗（初版：Copilot /
 
 - 目前对 Cline / Kilo Code 是“启发式扫描”，不同版本或存储结构变化可能导致统计不完整或重复。
 - Copilot 目前依赖导出 JSON（扩展无法稳定读取其内部内存日志/请求日志）。
+
+## Credits
+
+- Dashboard 统计图样式致敬：https://github.com/VicBilibily/GCMP
